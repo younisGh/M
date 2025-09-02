@@ -163,8 +163,8 @@ export default function ChatPage() {
                 <input type="range" min={12} max={18} value={fontSize} onChange={(e)=>setFontSize(Number(e.target.value))} />
               </label>
               <button onClick={()=>setClosed((v)=>!v)} className={`rounded-full border p-2 text-xs ${closed? 'bg-amber-500/20':'hover:bg-accent'}`} title="إغلاق/فتح" aria-label="إغلاق/فتح">{closed? 'مغلقة' : 'مفتوحة'}</button>
-              <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال صوتي" aria-label="اتصال صوتي">🔊</button>
-              <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال فيديوي" aria-label="اتصال فيديوي">🎥</button>
+              <button className="rounded-full border p-2 hover:bg-accent" title="اتصال صوتي" aria-label="اتصال صوتي"><Phone className="h-4 w-4" /></button>
+              <button className="rounded-full border p-2 hover:bg-accent" title="اتصال فيديوي" aria-label="اتصال فيديوي"><VideoIcon className="h-4 w-4" /></button>
             </div>
           </div>
 
