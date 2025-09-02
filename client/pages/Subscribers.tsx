@@ -18,6 +18,7 @@ type VideoItem = {
   title: string;
   description: string;
   thumbnailUrl: string;
+  videoUrl: string;
   views: number;
   comments: number;
   likes: number;
@@ -62,10 +63,20 @@ function PostCard({ p }: { p: Post }) {
 }
 
 function VideoCard({ v }: { v: VideoItem }) {
+  const [playing, setPlaying] = useState(false);
   return (
     <article className="group relative overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-brand">
       <div className="relative aspect-[16/9] overflow-hidden">
-        <img src={v.thumbnailUrl} alt={v.title} className="h-full w-full object-cover transition group-hover:scale-[1.02]" />
+        {playing ? (
+          <video src={v.videoUrl} className="h-full w-full object-cover" controls autoPlay playsInline onEnded={() => setPlaying(false)} />
+        ) : (
+          <>
+            <img src={v.thumbnailUrl} alt={v.title} className="h-full w-full object-cover transition group-hover:scale-[1.02]" />
+            <button onClick={() => setPlaying(true)} className="absolute inset-0 grid place-items-center text-white/90" aria-label="تشغيل الفيديو" title="تشغيل">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-black/50 backdrop-blur text-xl">▶</span>
+            </button>
+          </>
+        )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         <div className="absolute bottom-2 right-2 flex items-center justify-between gap-2">
           <Metrics p={v as any} />
@@ -123,6 +134,7 @@ export default function SubscribersPage() {
         title: "مشروع مصنع جديد",
         description: "ملخص عن خطوط الإنتاج والطاقة الاستيعابية والميزات التقنية.",
         thumbnailUrl: "https://images.unsplash.com/photo-1581092598539-6603cf16e2aa?q=80&w=1600&auto=format&fit=crop",
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
         views: 1400,
         comments: 24,
         likes: 180,
@@ -132,6 +144,7 @@ export default function SubscribersPage() {
         title: "مخطط منطقة لوجستية",
         description: "عرض بصري لمخططات البنى التحتية للمستودعات وساحة الحاويات.",
         thumbnailUrl: "https://images.unsplash.com/photo-1517502474097-f9b30659dadb?q=80&w=1600&auto=format&fit=crop",
+        videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
         views: 920,
         comments: 12,
         likes: 102,
@@ -141,6 +154,7 @@ export default function SubscribersPage() {
         title: "محطة طاقة شمسية",
         description: "نموذج أولي لمزرعة ألواح ضمن مشروع الطاقة.",
         thumbnailUrl: "https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1600&auto=format&fit=crop",
+        videoUrl: "https://media.w3.org/2010/05/sintel/trailer.mp4",
         views: 1100,
         comments: 19,
         likes: 130,
@@ -181,6 +195,7 @@ export default function SubscribersPage() {
         title: videoTitle || "فيديو جديد",
         description: videoDesc || "",
         thumbnailUrl: imageUrl,
+        videoUrl: videoUrl || "",
         views: 0,
         comments: 0,
         likes: 0,
