@@ -151,47 +151,62 @@ export default function SubscribersPage() {
 
   const [tab, setTab] = useState<'posts' | 'videos'>('posts');
   const [posts, setPosts] = useState<Post[]>(seed);
-  const [videos] = useState<VideoItem[]>(videosSeed);
+  const [videos, setVideos] = useState<VideoItem[]>(videosSeed);
   const [showComposer, setShowComposer] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [text, setText] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [videoTitle, setVideoTitle] = useState("");
+  const [videoDesc, setVideoDesc] = useState("");
   const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop");
+  const [pickedImageUrl, setPickedImageUrl] = useState<string>("");
 
   function addPost() {
     if (!text.trim()) return;
+    const img = pickedImageUrl || imageUrl;
     setPosts((p) => [
-      { id: String(Date.now()), author: "أنا", body: text, imageUrl, views: 0, comments: 0, likes: 0 },
+      { id: String(Date.now()), author: "أنا", body: text, imageUrl: img, views: 0, comments: 0, likes: 0 },
       ...p,
     ]);
     setText("");
+    setPickedImageUrl("");
     setShowComposer(false);
   }
 
   function addVideo() {
-    if (!videoUrl.trim()) return;
-    setPosts((p) => [
-      { id: String(Date.now()), author: "أنا", title: "فيديو جديد", body: `رابط الفيديو: ${videoUrl}` , imageUrl, views: 0, comments: 0, likes: 0 },
-      ...p,
+    if (!videoUrl.trim() && !videoTitle.trim()) return;
+    setVideos((v) => [
+      {
+        id: String(Date.now()),
+        title: videoTitle || "فيديو جديد",
+        description: videoDesc || "",
+        thumbnailUrl: imageUrl,
+        views: 0,
+        comments: 0,
+        likes: 0,
+      },
+      ...v,
     ]);
     setVideoUrl("");
+    setVideoTitle("");
+    setVideoDesc("");
     setShowVideo(false);
   }
 
   return (
     <section className="relative">
       {/* Fixed left rail */}
-      <div className="pointer-events-none fixed left-2 bottom-4 z-50 flex items-end gap-2">
-        <Link to="/" className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الرئيسية" aria-label="الرئيسية">
+      <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center gap-3">
+        <Link to="/subscribers" className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الرئيسية" aria-label="الرئيسية">
           <Home className="h-5 w-5" />
         </Link>
-        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة منشور" aria-label="إضافة منشور">
+        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة منشور" aria-label="إضافة منشور">
           <Plus className="h-5 w-5" />
         </button>
-        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500 text-black shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة فيديو" aria-label="إضافة فيديو">
+        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-black shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة فيديو" aria-label="إضافة فيديو">
           <Video className="h-5 w-5" />
         </button>
-        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الدردشة" aria-label="الدردشة">
+        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الدردشة" aria-label="الدردشة">
           <MessageCircle className="h-5 w-5" />
         </button>
       </div>
@@ -237,7 +252,12 @@ export default function SubscribersPage() {
           <div className="w-[min(92vw,560px)] rounded-2xl border bg-card p-4 shadow-xl">
             <h2 className="mb-2 text-lg font-bold">إضافة منشور</h2>
             <div className="mb-2 grid gap-2">
-              <input value={imageUrl} onChange={(e)=>setImageUrl(e.target.value)} placeholder="رابط الصورة" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <input value={imageUrl} onChange={(e)=>setImageUrl(e.target.value)} placeholder="رابط الصورة (اختياري)" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <div className="flex items-center gap-2">
+                <input id="postImageFile" type="file" accept="image/*" className="hidden" onChange={(e)=>{ const f=e.target.files?.[0]; if(f){ const url=URL.createObjectURL(f); setPickedImageUrl(url);} }} />
+                <label htmlFor="postImageFile" className="cursor-pointer rounded-xl border px-3 py-2 text-xs hover:bg-accent">إرفاق صورة</label>
+                {pickedImageUrl && <img src={pickedImageUrl} alt="preview" className="h-10 w-16 rounded object-cover" />}
+              </div>
               <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="اكتب منشورك هنا" className="min-h-[120px] w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
             </div>
             <div className="mt-3 flex justify-end gap-2">
@@ -253,7 +273,15 @@ export default function SubscribersPage() {
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(92vw,560px)] rounded-2xl border bg-card p-4 shadow-xl">
             <h2 className="mb-2 text-lg font-bold">إضافة فيديو</h2>
-            <input value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)} placeholder="رابط الفيديو" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+            <div className="grid gap-2">
+              <input value={videoTitle} onChange={(e)=>setVideoTitle(e.target.value)} placeholder="عنوان الفيديو" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <textarea value={videoDesc} onChange={(e)=>setVideoDesc(e.target.value)} placeholder="تفاصيل الفيديو" className="min-h-[90px] w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <input value={videoUrl} onChange={(e)=>setVideoUrl(e.target.value)} placeholder="رابط الفيديو (اختياري)" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <div className="flex items-center gap-2">
+                <input id="videoFile" type="file" accept="video/*" className="hidden" onChange={(e)=>{ const f=e.target.files?.[0]; if(f){ const url=URL.createObjectURL(f); setVideoUrl(url);} }} />
+                <label htmlFor="videoFile" className="cursor-pointer rounded-xl border px-3 py-2 text-xs hover:bg-accent">إرفاق مقطع فيديو</label>
+              </div>
+            </div>
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={()=>setShowVideo(false)} className="rounded-xl border px-4 py-2 text-sm">إلغاء</button>
               <button onClick={addVideo} className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">إضافة</button>
