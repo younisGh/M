@@ -4,7 +4,7 @@ import { ShieldCheck, Users, Home } from "lucide-react";
 export default function EdgeStickers() {
   const items = [
     { to: "/dashboard/stats", label: "صفحة الأدمن", color: "bg-rose-500", Icon: ShieldCheck },
-    { to: "/dashboard", label: "صفحة المشتركين", color: "bg-emerald-600", Icon: Users },
+    { to: "/subscribers", label: "صفحة المشتركين", color: "bg-emerald-600", Icon: Users },
     { to: "/", label: "صفحة الزائر", color: "bg-sky-600", Icon: Home },
   ];
   return (
