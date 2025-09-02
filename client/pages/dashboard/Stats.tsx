@@ -1,7 +1,17 @@
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Bar, BarChart, CartesianGrid } from "recharts";
-
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, BarChart, Bar } from "recharts";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  BarChart,
+  Bar,
+} from "recharts";
 import { sectionsData } from "@/components/home/SectionsInfograph";
+import { Users as UsersIcon, FileText, GitBranch } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const monthly = [
   { name: "يناير", users: 30, companies: 12 },
@@ -37,7 +47,13 @@ export default function StatsPage() {
     const subscribers = hashNum(s.title, 40, 120);
     const posts = Math.round(subscribers * 1.6);
     const branches = s.branches?.length ?? 0;
-    return { ...s, subscribers, posts, branches, color: palette[idx % palette.length] };
+    return {
+      ...s,
+      subscribers,
+      posts,
+      branches,
+      color: palette[idx % palette.length],
+    };
   });
 
   const totals = sectionCards.reduce(
@@ -52,12 +68,16 @@ export default function StatsPage() {
 
   return (
     <section className="grid gap-6">
-      <h1 className="text-2xl font-extrabold">الرئيسية · الأدمن</h1>
+      <h1 className="text-2xl font-extrabold">الأدمن</h1>
 
       {/* Section cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sectionCards.map((s, i) => (
-          <div key={s.title} className={`relative overflow-hidden rounded-2xl border p-5 text-white shadow-sm ${s.color}`}>
+          <Link
+            to={`/dashboard/section/${i}`}
+            key={s.title}
+            className={`relative block overflow-hidden rounded-2xl border p-5 text-white shadow-sm transition hover:brightness-105 ${s.color}`}
+          >
             <div className="absolute -right-12 -top-12 h-28 w-28 rounded-full bg-white/20 blur-2xl" />
             <div className="flex items-center gap-3">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-white/30 text-white">
@@ -79,22 +99,31 @@ export default function StatsPage() {
                 <div className="opacity-90">الأفرع</div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
       {/* Platform totals */}
       <div className="grid gap-4 rounded-2xl border bg-card p-4 text-center sm:grid-cols-3">
-        <div>
-          <div className="text-2xl font-extrabold text-violet-700">{totals.subscribers}</div>
+        <div className="grid place-items-center gap-1">
+          <UsersIcon className="h-5 w-5 text-violet-700" aria-hidden />
+          <div className="text-2xl font-extrabold text-violet-700">
+            {totals.subscribers}
+          </div>
           <div className="text-xs text-foreground/60">إجمالي المشتركين</div>
         </div>
-        <div>
-          <div className="text-2xl font-extrabold text-indigo-700">{totals.posts}</div>
+        <div className="grid place-items-center gap-1">
+          <FileText className="h-5 w-5 text-indigo-700" aria-hidden />
+          <div className="text-2xl font-extrabold text-indigo-700">
+            {totals.posts}
+          </div>
           <div className="text-xs text-foreground/60">إجمالي المنشورات</div>
         </div>
-        <div>
-          <div className="text-2xl font-extrabold text-emerald-700">{totals.branches}</div>
+        <div className="grid place-items-center gap-1">
+          <GitBranch className="h-5 w-5 text-emerald-700" aria-hidden />
+          <div className="text-2xl font-extrabold text-emerald-700">
+            {totals.branches}
+          </div>
           <div className="text-xs text-foreground/60">إجمالي الأفرع</div>
         </div>
       </div>
@@ -110,7 +139,12 @@ export default function StatsPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="users" stroke="hsl(var(--primary))" strokeWidth={2} />
+                <Line
+                  type="monotone"
+                  dataKey="users"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -124,7 +158,11 @@ export default function StatsPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="companies" fill="hsl(var(--primary))" radius={[6,6,0,0]} />
+                <Bar
+                  dataKey="companies"
+                  fill="hsl(var(--primary))"
+                  radius={[6, 6, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>

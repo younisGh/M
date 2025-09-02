@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+import type { ComponentType } from "react";
+
 export interface SectionItem {
   letter: string;
   title: string;
-  icon: (props: { className?: string }) => JSX.Element;
+  icon: ComponentType<{ className?: string }>;
   branches?: string[];
 }
 
@@ -34,8 +36,16 @@ export const sectionsData: SectionItem[] = [
     icon: Building2,
     branches: ["سكني", "تجاري", "صحي", "صناعي", "زراعي", "سياحي"],
   },
-  { letter: "ب", title: "الشركات الراغبة بالاستثمار في العراق", icon: Briefcase },
-  { letter: "ج", title: "شركات المقاولات العراقية والعربية والأجنبية", icon: Hammer },
+  {
+    letter: "ب",
+    title: "الشركات الراغبة بالاستثمار في العراق",
+    icon: Briefcase,
+  },
+  {
+    letter: "ج",
+    title: "شركات المقاولات العراقية والعربية والأجنبية",
+    icon: Hammer,
+  },
   { letter: "د", title: "المقاولين والمتعهدين في العراق", icon: Users },
   {
     letter: "هـ",
@@ -44,7 +54,7 @@ export const sectionsData: SectionItem[] = [
   },
   {
     letter: "ز",
-    title: "المحامين",
+    title: "المحا��ين",
     icon: Scale,
     branches: ["تسجيل الشركات", "التسجيل العقاري", "القطاع المصرفي"],
   },
@@ -53,7 +63,11 @@ export const sectionsData: SectionItem[] = [
     title: "المعامل العراقية المجازة من التنم��ة الصناعية",
     icon: Factory,
   },
-  { letter: "ي", title: "شركات تجهيز المعدات والمصانع والمواد الأولية", icon: Package },
+  {
+    letter: "ي",
+    title: "شركات تجهيز المعدات والمصانع والمواد الأولية",
+    icon: Package,
+  },
   { letter: "ع", title: "المكاتب الهندسية والتصميم", icon: Ruler },
   { letter: "غ", title: "شركات النقل في كافة المجالات", icon: Truck },
 ];
@@ -77,7 +91,11 @@ export function SectionsGrid() {
           {branches && branches.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {branches.map((b) => (
-                <Badge key={b} variant="secondary" className="bg-violet-50 text-violet-700">
+                <Badge
+                  key={b}
+                  variant="secondary"
+                  className="bg-violet-50 text-violet-700"
+                >
                   {b}
                 </Badge>
               ))}
@@ -89,7 +107,11 @@ export function SectionsGrid() {
   );
 }
 
-export default function SectionsInfograph({ controlledOpen, onToggle, showTrigger = true }: SectionsInfographProps) {
+export default function SectionsInfograph({
+  controlledOpen,
+  onToggle,
+  showTrigger = true,
+}: SectionsInfographProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = controlledOpen ?? uncontrolledOpen;
   const toggle = onToggle ?? (() => setUncontrolledOpen((v) => !v));

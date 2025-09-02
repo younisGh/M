@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ShieldCheck, Users, Home } from "lucide-react";
 
 export default function EdgeStickers() {
+  const { pathname } = useLocation();
+  if (pathname.includes("/chat")) return null;
+
   const items = [
-    { to: "/dashboard/stats", label: "صفحة الأدمن", color: "bg-rose-500", Icon: ShieldCheck },
-    { to: "/dashboard", label: "صفحة المشتركين", color: "bg-emerald-600", Icon: Users },
+    {
+      to: "/dashboard/stats",
+      label: "صفحة الأدمن",
+      color: "bg-rose-500",
+      Icon: ShieldCheck,
+    },
+    {
+      to: "/subscribers",
+      label: "صفحة المشتركين",
+      color: "bg-emerald-600",
+      Icon: Users,
+    },
     { to: "/", label: "صفحة الزائر", color: "bg-sky-600", Icon: Home },
   ];
   return (
