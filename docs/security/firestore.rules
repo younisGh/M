@@ -1,0 +1,142 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && (request.auth.token.admin == true); }
+    function isUser(userId) { return signedIn() && request.auth.uid == userId; }
+    function nowTs() { return request.time; }
+    function userDoc(uid) { return get(/databases/$(database)/documents/users/$(uid)); }
+    function hasActiveSub(uid) {
+      return userDoc(uid).data.subscription.status == 'active';
+    }
+    function isCompanyOwner(uid, companyId) {
+      return exists(/databases/$(database)/documents/companies/$(companyId)) &&
+             get(/databases/$(database)/documents/companies/$(companyId)).data.ownerUserId == uid;
+    }
+    function isChatMember(chatId) {
+      return exists(/databases/$(database)/documents/chats/$(chatId)) &&
+             (request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.memberIds);
+    }
+
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /provinces/{provId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /sections/{secId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /plans/{planId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isUser(userId);
+      allow update: if isUser(userId) &&
+        // Prevent role or subscription escalation by the user
+        request.resource.data.roles == resource.data.roles &&
+        request.resource.data.subscription == resource.data.subscription;
+      allow update, delete: if isAdmin();
+    }
+
+    match /companies/{companyId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update, delete: if isAdmin() || isCompanyOwner(request.auth.uid, companyId);
+    }
+
+    match /subscriptions/{subId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.ownerId == request.auth.uid);
+      // Writes only via backend (Functions) using Admin SDK
+      allow write: if false;
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.ownerId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if signedIn() && hasActiveSub(request.auth.uid) &&
+        request.resource.data.author.id == request.auth.uid;
+      allow update, delete: if isAdmin() || request.resource.data.author.id == request.auth.uid;
+    }
+
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update, delete: if isAdmin() || resource.data.authorId == request.auth.uid;
+    }
+
+    match /reactions/{reactionId} {
+      allow read: if true;
+      allow create, update, delete: if signedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /follows/{followId} {
+      allow read: if signedIn();
+      allow create, delete: if signedIn() && request.resource.data.followerId == request.auth.uid;
+    }
+
+    match /friendRequests/{reqId} {
+      allow read: if signedIn() && (resource.data.fromId == request.auth.uid || resource.data.toId == request.auth.uid || isAdmin());
+      allow create: if signedIn() && request.resource.data.fromId == request.auth.uid;
+      allow update, delete: if isAdmin() || resource.data.fromId == request.auth.uid || resource.data.toId == request.auth.uid;
+    }
+
+    match /chats/{chatId} {
+      allow read: if isChatMember(chatId) || (exists(/databases/$(database)/documents/chats/$(chatId)) && get(/databases/$(database)/documents/chats/$(chatId)).data.type == 'admin_broadcast' && signedIn());
+      allow create: if signedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /messages/{messageId} {
+      allow read: if isChatMember(resource.data.chatId) || (exists(/databases/$(database)/documents/chats/$(resource.data.chatId)) && get(/databases/$(database)/documents/chats/$(resource.data.chatId)).data.type == 'admin_broadcast' && signedIn());
+      allow create: if signedIn() && hasActiveSub(request.auth.uid) && isChatMember(request.resource.data.chatId) && (
+        // Respect chat readOnly unless admin
+        (get(/databases/$(database)/documents/chats/$(request.resource.data.chatId)).data.readOnly == false) || isAdmin()
+      ) && request.resource.data.senderId == request.auth.uid;
+      allow update, delete: if isAdmin() || resource.data.senderId == request.auth.uid;
+    }
+
+    match /calls/{callId} {
+      allow read, write: if signedIn();
+    }
+
+    match /notifications/{notifId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if isAdmin();
+      allow create: if signedIn();
+      allow update: if isAdmin();
+    }
+
+    match /blocks/{blockId} {
+      allow read: if signedIn() && resource.data.blockerId == request.auth.uid;
+      allow create, delete: if signedIn() && request.resource.data.blockerId == request.auth.uid;
+    }
+
+    match /media/{mediaId} {
+      allow read: if true;
+      allow write: if isAdmin() || (signedIn() && request.resource.data.ownerId == request.auth.uid);
+    }
+
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+  }
+}

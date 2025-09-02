@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "name_ar": "محترف",
+    "name_en": "Mohtaref",
+    "version": 1,
+    "requiredOnSignup": ["provinceId", "primarySectionId"],
+    "optionalOnSignup": ["branchSectionId"]
+  },
+  "provinces": [
+    { "id": "baghdad", "name_ar": "بغداد", "name_en": "Baghdad", "active": true },
+    { "id": "basra", "name_ar": "البصرة", "name_en": "Basra", "active": true },
+    { "id": "nineveh", "name_ar": "نينوى", "name_en": "Nineveh", "active": true },
+    { "id": "erbil", "name_ar": "أربيل", "name_en": "Erbil", "active": true },
+    { "id": "sulaymaniyah", "name_ar": "السليمانية", "name_en": "Sulaymaniyah", "active": true },
+    { "id": "duhok", "name_ar": "دهوك", "name_en": "Duhok", "active": true },
+    { "id": "kirkuk", "name_ar": "كركوك", "name_en": "Kirkuk", "active": true },
+    { "id": "diyala", "name_ar": "ديالى", "name_en": "Diyala", "active": true },
+    { "id": "anbar", "name_ar": "الأنبار", "name_en": "Anbar", "active": true },
+    { "id": "babil", "name_ar": "بابل", "name_en": "Babil", "active": true },
+    { "id": "karbala", "name_ar": "كربلاء", "name_en": "Karbala", "active": true },
+    { "id": "najaf", "name_ar": "النجف", "name_en": "Najaf", "active": true },
+    { "id": "qadisiyyah", "name_ar": "القادسية (الديوانية)", "name_en": "Al-Qadisiyyah (Diwaniyah)", "active": true },
+    { "id": "wasit", "name_ar": "واسط", "name_en": "Wasit", "active": true },
+    { "id": "maysan", "name_ar": "ميسان", "name_en": "Maysan", "active": true },
+    { "id": "dhi-qar", "name_ar": "ذي قار", "name_en": "Dhi Qar", "active": true },
+    { "id": "muthanna", "name_ar": "المثنى", "name_en": "Muthanna", "active": true },
+    { "id": "salah-ad-din", "name_ar": "صلاح الدين", "name_en": "Salah ad Din", "active": true },
+    { "id": "halabja", "name_ar": "حلبجة", "name_en": "Halabja", "active": true }
+  ],
+  "sections": [
+    { "id": "investment", "name_ar": "شركات الاستثمار والمستثمرين في العراق", "name_en": "Investment Companies & Investors in Iraq", "parentId": null, "active": true },
+    { "id": "investment-residential", "name_ar": "سكني", "name_en": "Residential", "parentId": "investment", "active": true },
+    { "id": "investment-commercial", "name_ar": "تجاري", "name_en": "Commercial", "parentId": "investment", "active": true },
+    { "id": "investment-healthcare", "name_ar": "صحي", "name_en": "Healthcare", "parentId": "investment", "active": true },
+    { "id": "investment-industrial", "name_ar": "صناعي", "name_en": "Industrial", "parentId": "investment", "active": true },
+    { "id": "investment-agricultural", "name_ar": "زراعي", "name_en": "Agricultural", "parentId": "investment", "active": true },
+    { "id": "investment-tourism", "name_ar": "سياحي", "name_en": "Tourism", "parentId": "investment", "active": true },
+
+    { "id": "invest-interest", "name_ar": "الشركات الراغبة بالاستثمار في العراق", "name_en": "Companies Interested in Investing in Iraq", "parentId": null, "active": true },
+    { "id": "contracting-companies", "name_ar": "شركات المقاولات العراقية والعربية والأجنبية", "name_en": "Iraqi, Arab and Foreign Contracting Companies", "parentId": null, "active": true },
+    { "id": "contractors", "name_ar": "المقاولين والمتعهدين في العراق", "name_en": "Contractors and Subcontractors in Iraq", "parentId": null, "active": true },
+
+    { "id": "consulting-feasibility-tax", "name_ar": "المكاتب الاستشارية دراسات الجدوى والتحاسب الضريبي", "name_en": "Consulting Offices (Feasibility Studies & Tax Accounting)", "parentId": null, "active": true },
+
+    { "id": "lawyers", "name_ar": "المحامين", "name_en": "Lawyers", "parentId": null, "active": true },
+    { "id": "lawyers-company-registration", "name_ar": "تسجيل الشركات", "name_en": "Company Registration", "parentId": "lawyers", "active": true },
+    { "id": "lawyers-real-estate-reg", "name_ar": "التسجيل العقاري", "name_en": "Real Estate Registration", "parentId": "lawyers", "active": true },
+    { "id": "lawyers-banking-sector", "name_ar": "القطاع المصرفي", "name_en": "Banking Sector", "parentId": "lawyers", "active": true },
+
+    { "id": "licensed-factories", "name_ar": "المعامل العراقية المجازة من التنمية الصناعية", "name_en": "Iraqi Factories Licensed by Industrial Development", "parentId": null, "active": true },
+    { "id": "equipment-suppliers", "name_ar": "شركات تجهيز المعدات والمصانع والمواد الأولية", "name_en": "Suppliers of Equipment, Factories and Raw Materials", "parentId": null, "active": true },
+    { "id": "engineering-design", "name_ar": "المكاتب الهندسية والتصميم", "name_en": "Engineering and Design Offices", "parentId": null, "active": true },
+    { "id": "transport", "name_ar": "شركات النقل في كافة المجالات", "name_en": "Transport Companies (All Sectors)", "parentId": null, "active": true },
+
+    { "id": "oil-gas-energy", "name_ar": "النفط والغاز والطاقة", "name_en": "Oil, Gas and Energy", "parentId": null, "active": true },
+    { "id": "general-trade", "name_ar": "التجارة العامة والاستيراد والتصدير", "name_en": "General Trade, Import and Export", "parentId": null, "active": true }
+  ]
+}

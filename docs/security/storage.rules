@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && (request.auth.token.admin == true); }
+
+    // User-owned content
+    match /users/{uid}/{allPaths=**} {
+      allow read: if true;
+      allow write: if signedIn() && request.auth.uid == uid && request.resource.size < 20 * 1024 * 1024;
+    }
+
+    // Public media (thumbnails, public assets)
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Posts media uploaded via backend only for consistency
+    match /posts/{postId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Chat attachments – restrict to authenticated users; deeper validation should be done in Functions
+    match /chats/{chatId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if signedIn() && request.resource.size < 50 * 1024 * 1024;
+    }
+  }
+}
