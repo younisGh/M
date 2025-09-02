@@ -22,6 +22,7 @@ import ProfilePage from "./pages/dashboard/Profile";
 import StatsPage from "./pages/dashboard/Stats";
 import PostsPage from "./pages/dashboard/Posts";
 import ChatPage from "./pages/dashboard/Chat";
+import SubscribersPage from "./pages/Subscribers";
 import BroadcastPage from "./pages/dashboard/Broadcast";
 import NotificationsPage from "./pages/dashboard/Notifications";
 import CallsPage from "./pages/dashboard/Calls";
@@ -70,7 +71,7 @@ function Footer() {
   return (
     <footer className="border-t bg-white/50 dark:bg-background/70">
       <div className="container py-8 text-center text-sm text-foreground/60">
-        © {new Date().getFullYear()} Mohtaref �� جميع الحقوق محفوظة
+        © {new Date().getFullYear()} Mohtaref · جميع الحقوق محفوظة
       </div>
     </footer>
   );
@@ -103,6 +104,8 @@ const App = () => (
             <Route path="/companies" element={<Companies />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/subscribers" element={<SubscribersPage />} />
+            <Route path="/chat" element={<ChatPage />} />
 
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<DashboardHome />} />
