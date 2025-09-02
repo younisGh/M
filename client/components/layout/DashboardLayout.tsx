@@ -47,13 +47,8 @@ export default function DashboardLayout() {
       <div className={`mt-4 flex ${flexDir} gap-4`}>
         {/* Sidebar: fixed when open */}
         {open && (
-          <div className={`fixed ${fixedSide} top-16 z-50 h-[calc(100vh-4rem)] w-64 md:static md:z-auto`}>
-            <div className="md:hidden">
-              <Sidebar />
-            </div>
-            <div className="hidden md:block">
-              <Sidebar />
-            </div>
+          <div className={`fixed ${fixedSide} top-16 z-50 h-[calc(100vh-4rem)] w-64`}>
+            <Sidebar />
           </div>
         )}
 
