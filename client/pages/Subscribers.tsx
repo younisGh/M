@@ -13,6 +13,16 @@ export type Post = {
   likes: number;
 };
 
+type VideoItem = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  views: number;
+  comments: number;
+  likes: number;
+};
+
 function Metrics({ p }: { p: Pick<Post, "views" | "comments" | "likes"> }) {
   return (
     <div className="flex items-center gap-3 text-[11px] text-white/90 drop-shadow">
@@ -51,6 +61,25 @@ function PostCard({ p }: { p: Post }) {
   );
 }
 
+function VideoCard({ v }: { v: VideoItem }) {
+  return (
+    <article className="group relative overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-brand">
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <img src={v.thumbnailUrl} alt={v.title} className="h-full w-full object-cover transition group-hover:scale-[1.02]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute bottom-2 right-2 flex items-center justify-between gap-2">
+          <Metrics p={v as any} />
+        </div>
+        <div className="absolute left-2 top-2 rounded-full bg-black/40 px-2 py-1 text-xs text-white">فيديو</div>
+      </div>
+      <div className="p-4">
+        <h3 className="text-sm font-semibold">{v.title}</h3>
+        <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{v.description}</p>
+      </div>
+    </article>
+  );
+}
+
 export default function SubscribersPage() {
   const navigate = useNavigate();
   const seed = useMemo<Post[]>(
@@ -60,7 +89,7 @@ export default function SubscribersPage() {
         author: "شركة الرافدين",
         title: "توسعة خدماتنا",
         body: "أطلقنا اليوم مجموعة من الخدمات الجديدة لدعم الشركات الصغيرة والمتوسطة في التحول الرقمي... تفاصيل أكثر داخل المنشور.",
-        imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop",
+        imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop",
         views: 1200,
         comments: 35,
         likes: 210,
@@ -69,7 +98,7 @@ export default function SubscribersPage() {
         id: "2",
         author: "نفط الجنوب",
         body: "فرص تدريب جديدة لحديثي التخرج في قسم التشغيل والصيانة مع شهادات معتمدة.",
-        imageUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
+        imageUrl: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop",
         views: 780,
         comments: 18,
         likes: 96,
@@ -78,7 +107,7 @@ export default function SubscribersPage() {
         id: "3",
         author: "بناء العراق",
         body: "بدء العمل في مشروع الإسكان الجديد بمنطقة الكرادة، المرحلة الأولى تشمل 300 وحدة سكنية.",
-        imageUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop",
+        imageUrl: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop",
         views: 980,
         comments: 22,
         likes: 144,
@@ -87,12 +116,47 @@ export default function SubscribersPage() {
     [],
   );
 
+  const videosSeed = useMemo<VideoItem[]>(
+    () => [
+      {
+        id: "v1",
+        title: "مشروع مصنع جديد",
+        description: "ملخص عن خطوط الإنتاج والطاقة الاستيعابية والميزات التقنية.",
+        thumbnailUrl: "https://images.unsplash.com/photo-1581092598539-6603cf16e2aa?q=80&w=1600&auto=format&fit=crop",
+        views: 1400,
+        comments: 24,
+        likes: 180,
+      },
+      {
+        id: "v2",
+        title: "مخطط مدينة صناعية",
+        description: "عرض بصري لمخططات البنى التحتية للمشروع.",
+        thumbnailUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
+        views: 920,
+        comments: 12,
+        likes: 102,
+      },
+      {
+        id: "v3",
+        title: "محطة طاقة شمسية",
+        description: "نموذج أولي لمزرعة ألواح ضمن مشروع الطاقة.",
+        thumbnailUrl: "https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1600&auto=format&fit=crop",
+        views: 1100,
+        comments: 19,
+        likes: 130,
+      },
+    ],
+    [],
+  );
+
+  const [tab, setTab] = useState<'posts' | 'videos'>('posts');
   const [posts, setPosts] = useState<Post[]>(seed);
+  const [videos] = useState<VideoItem[]>(videosSeed);
   const [showComposer, setShowComposer] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [text, setText] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1600&auto=format&fit=crop");
+  const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop");
 
   function addPost() {
     if (!text.trim()) return;
@@ -133,12 +197,38 @@ export default function SubscribersPage() {
       </div>
 
       <div className="container py-6">
-        <h1 className="mb-4 text-2xl font-extrabold">المشتركين</h1>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((p) => (
-            <PostCard key={p.id} p={p} />
-          ))}
+        <div className="mb-4 inline-flex rounded-xl border bg-card p-1 text-sm">
+          <button
+            className={`rounded-lg px-4 py-2 font-semibold ${tab === 'posts' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
+            onClick={() => setTab('posts')}
+            aria-selected={tab === 'posts'}
+            role="tab"
+          >
+            المنشورات
+          </button>
+          <button
+            className={`rounded-lg px-4 py-2 font-semibold ${tab === 'videos' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
+            onClick={() => setTab('videos')}
+            aria-selected={tab === 'videos'}
+            role="tab"
+          >
+            الفيديوهات
+          </button>
         </div>
+
+        {tab === 'posts' ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((p) => (
+              <PostCard key={p.id} p={p} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {videos.map((v) => (
+              <VideoCard key={v.id} v={v} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Composer modal */}
