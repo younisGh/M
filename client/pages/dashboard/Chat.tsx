@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { Phone, Video as VideoIcon, Image as ImageIcon, Mic, Paperclip } from "lucide-react";
 import { useMock } from "@/mock/MockContext";
 import PaywallNotice from "@/components/mock/PaywallNotice";
 
