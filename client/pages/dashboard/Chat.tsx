@@ -52,6 +52,9 @@ export default function ChatPage() {
   const [pending, setPending] = useState<Attachment[]>([]);
   const [closed, setClosed] = useState(false);
   const [fontSize, setFontSize] = useState(14);
+  const [isTyping, setIsTyping] = useState(false);
+  const [closed, setClosed] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
 
   const { role, subscription, chatReadOnly } = useMock();
 
