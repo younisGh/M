@@ -33,9 +33,20 @@ const items = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [isRtl, setIsRtl] = useState<boolean>(true);
+
+  useEffect(() => {
+    const updateDir = () => setIsRtl(document?.documentElement?.dir === "rtl");
+    updateDir();
+    const obs = new MutationObserver(updateDir);
+    if (document?.documentElement) {
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
+    }
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <aside className={`relative h-[calc(100vh-4rem)] rtl:border-r ltr:border-l bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 ${collapsed ? "w-20" : "w-64"} transition-[width] duration-200`}>
+    <aside className={`relative h-[calc(100vh-4rem)] ${isRtl ? "border-r" : "border-l"} bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 ${collapsed ? "w-20" : "w-64"} transition-[width] duration-200`}>
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] flex-col">
         <div className="flex items-center justify-between p-3">
           <div className="text-sm font-extrabold text-primary">لوحة التحكم</div>
