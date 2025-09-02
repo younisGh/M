@@ -29,7 +29,7 @@ export default function ChatPage() {
     () => [
       { id: "u1", name: "علي كريم", company: "شركة الرافدين" },
       { id: "u2", name: "سارة محمد", company: "نفط الجنوب" },
-      { id: "u3", name: "حسن عمران", company: "بناء العراق" },
+      { id: "u3", name: "حسن عمران", company: "ب��اء العراق" },
       { id: "u4", name: "نور مهدي", company: "مصرف الرافدين" },
     ],
     [],
@@ -189,6 +189,9 @@ export default function ChatPage() {
                 )}
               </div>
             ))}
+            {isTyping && (
+              <div className="text-xs text-foreground/60">{active?.name || 'المساعد'} يكتب...</div>
+            )}
           </div>
 
           {/* Composer */}
