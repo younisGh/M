@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Phone, Video as VideoIcon, Image as ImageIcon, Mic, Paperclip, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMock } from "@/mock/MockContext";
@@ -45,7 +46,7 @@ export default function ChatPage() {
 
   const [conversations, setConversations] = useState<Record<string, Message[]>>({
     u1: [
-      { id: "m1", from: "علي كريم", text: "أهلًا! كيف يمكنني المساعدة؟" },
+      { id: "m1", from: "علي كريم", text: "أهلًا! كي�� يمكنني المساعدة؟" },
     ],
   });
 
@@ -55,6 +56,7 @@ export default function ChatPage() {
   const [fontSize, setFontSize] = useState(14);
   const [isTyping, setIsTyping] = useState(false);
   const [showChatMobile, setShowChatMobile] = useState(false);
+  const isMobile = useIsMobile();
 
   const { role, subscription, chatReadOnly, setChatReadOnly } = useMock();
 
@@ -141,13 +143,15 @@ export default function ChatPage() {
 
   return (
     <section className="grid gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold">التواصل</h1>
-        <Link to="/subscribers" className="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-sm hover:bg-accent" title="رجوع" aria-label="رجوع">
-          <ArrowRight className="h-4 w-4" /> رجوع
-        </Link>
-      </div>
-      <div className="grid gap-4 md:grid-cols-[300px,1fr]">
+      {!(isMobile && showChatMobile) && (
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-extrabold">التواصل</h1>
+          <Link to="/subscribers" className="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-sm hover:bg-accent" title="رجوع" aria-label="رجوع">
+            <ArrowRight className="h-4 w-4" /> رجوع
+          </Link>
+        </div>
+      )}
+      <div className="relative grid gap-4 md:grid-cols-[300px,1fr]">
         {/* Contacts */}
         <aside className={`rounded-2xl border p-3 ${showChatMobile ? "hidden md:block" : ""}`}>
           <div className="mb-3">
@@ -164,7 +168,7 @@ export default function ChatPage() {
                 key={c.id}
                 onClick={() => {
                   setActiveId(c.id);
-                  setShowChatMobile(true);
+                  setShowChatMobile(isMobile);
                 }}
                 className={`w-full rounded-xl px-3 py-2 text-right text-sm ${
                   activeId === c.id ? "bg-accent" : "hover:bg-accent"
@@ -178,8 +182,8 @@ export default function ChatPage() {
         </aside>
 
         {/* Conversation */}
-        <div className={`${showChatMobile ? "flex" : "hidden md:flex"} min-h-[460px] flex-col rounded-2xl border`}>
-          <div className="flex items-center justify-between border-b px-4 py-3">
+        <div className={`${showChatMobile ? "flex" : "hidden md:flex"} min-h-[460px] flex-col md:rounded-2xl border transition-all duration-300 ${isMobile && showChatMobile ? "fixed inset-0 z-[60] rounded-none border-0 bg-background" : "bg-card"}`}>
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background/80 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
             <div className="flex items-center gap-2">
               <button onClick={() => setShowChatMobile(false)} className="md:hidden rounded-full border p-2 hover:bg-accent" title="رجوع" aria-label="رجوع">
                 <ArrowRight className="h-4 w-4" />
@@ -203,15 +207,15 @@ export default function ChatPage() {
             </div>
           </div>
 
-          <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4" style={{ fontSize }}>
+          <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4 bg-gradient-to-b from-background to-background/60" style={{ fontSize }}>
             {msgs.map((m) => (
               <div
                 key={m.id}
-                className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm transition-transform duration-200 will-change-transform ${
                   m.from === "أنا"
                     ? "ms-auto bg-primary text-primary-foreground"
                     : "bg-accent"
-                }`}
+                } hover:scale-[1.01]`}
               >
                 <div className="text-[11px] opacity-70">{m.from}</div>
                 {m.text && <div className="mt-1 whitespace-pre-wrap">{m.text}</div>}
