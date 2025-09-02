@@ -175,6 +175,9 @@ export default function ChatPage() {
               <div className="text-foreground/60">{active?.company}</div>
             </div>
             <div className="flex items-center gap-2">
+              {chatReadOnly && (
+                <button onClick={()=>setChatReadOnly(false)} className="rounded-full border px-3 py-1 text-xs hover:bg-accent" title="فتح القناة" aria-label="فتح القناة">فتح القناة</button>
+              )}
               <label className="flex items-center gap-1 text-xs text-foreground/70" title="حجم الخط">
                 Aa
                 <input type="range" min={12} max={18} value={fontSize} onChange={(e)=>setFontSize(Number(e.target.value))} />
