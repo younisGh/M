@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+import type { ComponentType } from "react";
+
 export interface SectionItem {
   letter: string;
   title: string;
-  icon: (props: { className?: string }) => JSX.Element;
+  icon: ComponentType<{ className?: string }>;
   branches?: string[];
 }
 
@@ -44,7 +46,7 @@ export const sectionsData: SectionItem[] = [
   },
   {
     letter: "ز",
-    title: "المحامين",
+    title: "المحا��ين",
     icon: Scale,
     branches: ["تسجيل الشركات", "التسجيل العقاري", "القطاع المصرفي"],
   },
