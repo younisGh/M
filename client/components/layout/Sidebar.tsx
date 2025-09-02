@@ -12,7 +12,9 @@ import {
   ChevronLeft,
   ChevronRight,
   CreditCard,
+  Shield,
 } from "lucide-react";
+import { useMock } from "@/mock/MockContext";
 
 const items = [
   { to: "/dashboard", label: "الرئيسية", icon: Home },
@@ -26,14 +28,17 @@ const items = [
   { to: "/dashboard/notifications", label: "الإشعارات", icon: Bell },
   { to: "/dashboard/payments", label: "المدفوعات", icon: CreditCard },
   { to: "/dashboard/calls", label: "المكالمات", icon: MessageSquareText },
+  { to: "/dashboard/privacy", label: "سياسة الخصوصية", icon: Shield },
   { to: "/dashboard/settings", label: "الإعدادات", icon: Settings },
 ];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { lang } = useMock();
+  const isArabic = lang === "ar";
 
   return (
-    <aside className={`relative h-[calc(100vh-4rem)] border-l bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 ${collapsed ? "w-20" : "w-64"} transition-[width] duration-200`}> 
+    <aside className={`relative h-[calc(100vh-4rem)] ${isArabic ? "border-r" : "border-l"} bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 ${collapsed ? "w-20" : "w-64"} transition-[width] duration-200`}>
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] flex-col">
         <div className="flex items-center justify-between p-3">
           <div className="text-sm font-extrabold text-primary">لوحة التحكم</div>
