@@ -132,16 +132,21 @@ export default function ChatPage() {
         <div className="flex min-h-[460px] flex-col rounded-2xl border">
           <div className="flex items-center justify-between border-b px-4 py-3">
             <div className="text-sm">
-              <div className="font-extrabold">{active?.name}</div>
+              <div className="font-extrabold">{active?.name || "مستخدم"}</div>
               <div className="text-foreground/60">{active?.company}</div>
             </div>
             <div className="flex items-center gap-2">
+              <label className="flex items-center gap-1 text-xs text-foreground/70" title="حجم الخط">
+                Aa
+                <input type="range" min={12} max={18} value={fontSize} onChange={(e)=>setFontSize(Number(e.target.value))} />
+              </label>
+              <button onClick={()=>setClosed((v)=>!v)} className={`rounded-full border p-2 text-xs ${closed? 'bg-amber-500/20':'hover:bg-accent'}`} title="إغلاق/فتح" aria-label="إغلاق/فتح">{closed? 'مغلقة' : 'مفتوحة'}</button>
               <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال صوتي" aria-label="اتصال صوتي">🔊</button>
               <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال فيديوي" aria-label="اتصال فيديوي">🎥</button>
             </div>
           </div>
 
-          <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4">
+          <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4" style={{ fontSize }}>
             {msgs.map((m) => (
               <div
                 key={m.id}
@@ -167,7 +172,7 @@ export default function ChatPage() {
           {/* Composer */}
           <div className="border-t p-3">
             <PaywallNotice feature="المراسلة" />
-            {/* Pending attachments preview */}
+            {closed && <div className="mb-2 rounded-xl border bg-amber-50 p-2 text-xs text-amber-700">المحادثة مغلقة. افتحها لإرسال رسائل.</div>}
             {pending.length > 0 && (
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 {pending.map((a) => (
@@ -181,25 +186,20 @@ export default function ChatPage() {
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
                 placeholder={`أرسل رسالة إلى ${active?.name ?? "المستخدم"}`}
-                className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                disabled={closed}
               />
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/*,application/pdf,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.*,*/*"
-                className="hidden"
-                onChange={onFilesSelected}
-              />
-              <button
-                onClick={onPickFiles}
-                className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-accent"
-              >
-                مرفق
-              </button>
+              <input ref={fileInputRef} type="file" multiple accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.*" className="hidden" onChange={onFilesSelected} />
+              <input ref={imageInputRef} type="file" multiple accept="image/*" className="hidden" onChange={onImageSelected} />
+              <input ref={audioInputRef} type="file" multiple accept="audio/*" className="hidden" onChange={onAudioSelected} />
+
+              <button onClick={onPickImage} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">صورة</button>
+              <button onClick={onPickAudio} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">صوت</button>
+              <button onClick={onPickFiles} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">ملف</button>
               <button
                 onClick={send}
-                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+                disabled={closed}
+                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
                 إرسال
               </button>
