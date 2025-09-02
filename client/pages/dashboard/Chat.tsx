@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
-import { Phone, Video as VideoIcon, Image as ImageIcon, Mic, Paperclip } from "lucide-react";
+import { Phone, Video as VideoIcon, Image as ImageIcon, Mic, Paperclip, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useMock } from "@/mock/MockContext";
 import PaywallNotice from "@/components/mock/PaywallNotice";
 
@@ -126,7 +127,7 @@ export default function ChatPage() {
         const reply: Message = {
           id: `${Date.now()}_r`,
           from: active?.name || "المساعد",
-          text: "حسناً، تم استلام رسالتك وسنرد قريباً.",
+          text: "حسناً، تم استلام رسالتك وسنرد ق��يباً.",
         };
         return { ...conv, [activeId]: [...list, reply] };
       });
@@ -139,7 +140,12 @@ export default function ChatPage() {
 
   return (
     <section className="grid gap-4">
-      <h1 className="text-2xl font-extrabold">التواصل</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-extrabold">التواصل</h1>
+        <Link to="/subscribers" className="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-sm hover:bg-accent" title="رجوع" aria-label="رجوع">
+          <ArrowRight className="h-4 w-4" /> رجوع
+        </Link>
+      </div>
       <div className="grid gap-4 md:grid-cols-[300px,1fr]">
         {/* Contacts */}
         <aside className="rounded-2xl border p-3">
@@ -178,7 +184,7 @@ export default function ChatPage() {
               {chatReadOnly && (
                 <button onClick={()=>setChatReadOnly(false)} className="rounded-full border px-3 py-1 text-xs hover:bg-accent" title="فتح القناة" aria-label="فتح القناة">فتح القناة</button>
               )}
-              <label className="flex items-center gap-1 text-xs text-foreground/70" title="حجم الخط">
+              <label className="flex items-center gap-1 text-xs text-foreground/70" title="ح��م الخط">
                 Aa
                 <input type="range" min={12} max={18} value={fontSize} onChange={(e)=>setFontSize(Number(e.target.value))} />
               </label>
