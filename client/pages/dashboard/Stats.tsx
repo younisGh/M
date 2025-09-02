@@ -1,5 +1,3 @@
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Bar, BarChart, CartesianGrid } from "recharts";
-
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, BarChart, Bar } from "recharts";
 import { sectionsData } from "@/components/home/SectionsInfograph";
 
@@ -52,7 +50,7 @@ export default function StatsPage() {
 
   return (
     <section className="grid gap-6">
-      <h1 className="text-2xl font-extrabold">الرئيسية · الأدمن</h1>
+      <h1 className="text-2xl font-extrabold">ال��ئيسية · الأدمن</h1>
 
       {/* Section cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
