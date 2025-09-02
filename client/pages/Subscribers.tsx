@@ -2,36 +2,51 @@ import { useMemo, useState } from "react";
 import { Eye, MessageSquare, Heart, Home, Plus, Video, MessageCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-type Post = {
+export type Post = {
   id: string;
   author: string;
   title?: string;
   body: string;
+  imageUrl: string;
   views: number;
   comments: number;
   likes: number;
 };
 
-function PostItem({ p }: { p: Post }) {
+function Metrics({ p }: { p: Pick<Post, "views" | "comments" | "likes"> }) {
+  return (
+    <div className="flex items-center gap-3 text-[11px] text-white/90 drop-shadow">
+      <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" /> {p.views}</span>
+      <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5" /> {p.comments}</span>
+      <span className="inline-flex items-center gap-1"><Heart className="h-3.5 w-3.5" /> {p.likes}</span>
+    </div>
+  );
+}
+
+function PostCard({ p }: { p: Post }) {
   const [open, setOpen] = useState(false);
   return (
-    <article className="rounded-2xl border bg-card p-4">
-      <header className="mb-2 flex items-center justify-between">
-        <div className="text-xs text-foreground/60">{p.author}</div>
-        <div className="flex items-center gap-3 text-[11px] text-foreground/60">
-          <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" /> {p.views}</span>
-          <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5" /> {p.comments}</span>
-          <span className="inline-flex items-center gap-1"><Heart className="h-3.5 w-3.5" /> {p.likes}</span>
+    <article className="group relative overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-brand">
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <img src={p.imageUrl} alt={p.title ?? p.author} className="h-full w-full object-cover transition group-hover:scale-[1.02]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute bottom-2 right-2 flex items-center justify-between gap-2">
+          <Metrics p={p} />
         </div>
-      </header>
-      {p.title && <h3 className="mb-1 text-sm font-semibold">{p.title}</h3>}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="w-full text-right text-sm leading-6 text-foreground/90 hover:underline"
-        aria-expanded={open}
-      >
-        <span className={open ? "whitespace-pre-wrap" : "line-clamp-3 whitespace-pre-wrap"}>{p.body}</span>
-      </button>
+      </div>
+      <div className="p-4">
+        <header className="mb-1 flex items-center justify-between">
+          <div className="text-xs text-foreground/60">{p.author}</div>
+        </header>
+        {p.title && <h3 className="text-sm font-semibold">{p.title}</h3>}
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="mt-2 w-full text-right text-sm leading-6 text-foreground/90 hover:underline"
+          aria-expanded={open}
+        >
+          <span className={open ? "whitespace-pre-wrap" : "line-clamp-2 whitespace-pre-wrap"}>{p.body}</span>
+        </button>
+      </div>
     </article>
   );
 }
@@ -44,7 +59,8 @@ export default function SubscribersPage() {
         id: "1",
         author: "شركة الرافدين",
         title: "توسعة خدماتنا",
-        body: "أطلقنا اليوم مجموعة من الخدمات الجديدة لدعم الشركات الصغيرة والمتوسطة في التحول الرقمي...\nتفاصيل أكثر داخل المنشور.",
+        body: "أطلقنا اليوم مجموعة من الخدمات الجديدة لدعم الشركات الصغيرة والمتوسطة في التحول الرقمي... تفاصيل أكثر داخل المنشور.",
+        imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop",
         views: 1200,
         comments: 35,
         likes: 210,
@@ -52,7 +68,8 @@ export default function SubscribersPage() {
       {
         id: "2",
         author: "نفط الجنوب",
-        body: "فرص تدريب جديدة لحديثي ال��خرج في قسم التشغيل والصيانة مع شهادات معتمدة.",
+        body: "فرص تدريب جديدة لحديثي التخرج في قسم التشغيل والصيانة مع شهادات معتمدة.",
+        imageUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
         views: 780,
         comments: 18,
         likes: 96,
@@ -61,6 +78,7 @@ export default function SubscribersPage() {
         id: "3",
         author: "بناء العراق",
         body: "بدء العمل في مشروع الإسكان الجديد بمنطقة الكرادة، المرحلة الأولى تشمل 300 وحدة سكنية.",
+        imageUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop",
         views: 980,
         comments: 22,
         likes: 144,
@@ -74,11 +92,12 @@ export default function SubscribersPage() {
   const [showVideo, setShowVideo] = useState(false);
   const [text, setText] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1600&auto=format&fit=crop");
 
   function addPost() {
     if (!text.trim()) return;
     setPosts((p) => [
-      { id: String(Date.now()), author: "أنا", body: text, views: 0, comments: 0, likes: 0 },
+      { id: String(Date.now()), author: "أنا", body: text, imageUrl, views: 0, comments: 0, likes: 0 },
       ...p,
     ]);
     setText("");
@@ -88,7 +107,7 @@ export default function SubscribersPage() {
   function addVideo() {
     if (!videoUrl.trim()) return;
     setPosts((p) => [
-      { id: String(Date.now()), author: "أنا", title: "فيديو جديد", body: `رابط الفيديو: ${videoUrl}`, views: 0, comments: 0, likes: 0 },
+      { id: String(Date.now()), author: "أنا", title: "فيديو جديد", body: `رابط الفيديو: ${videoUrl}` , imageUrl, views: 0, comments: 0, likes: 0 },
       ...p,
     ]);
     setVideoUrl("");
@@ -102,32 +121,35 @@ export default function SubscribersPage() {
         <Link to="/" className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-background/80 p-3 shadow hover:bg-accent" title="الرئيسية" aria-label="الرئيسية">
           <Home className="h-5 w-5" />
         </Link>
-        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-background/80 p-3 shadow hover:bg-accent" title="إضافة منشور" aria-label="إضافة منشور">
+        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="إضافة منشور" aria-label="إضافة منشور">
           <Plus className="h-5 w-5" />
         </button>
-        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-background/80 p-3 shadow hover:bg-accent" title="إضافة فيديو" aria-label="إضافة فيديو">
+        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="إضافة فيديو" aria-label="إضافة فيديو">
           <Video className="h-5 w-5" />
         </button>
-        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-background/80 p-3 shadow hover:bg-accent" title="الدردشة" aria-label="الدردشة">
+        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="الدردشة" aria-label="الدردشة">
           <MessageCircle className="h-5 w-5" />
         </button>
       </div>
 
       <div className="container py-6">
         <h1 className="mb-4 text-2xl font-extrabold">المشتركين</h1>
-        <div className="grid gap-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((p) => (
-            <PostItem key={p.id} p={p} />
+            <PostCard key={p.id} p={p} />
           ))}
         </div>
       </div>
 
-      {/* Simple modals */}
+      {/* Composer modal */}
       {showComposer && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(92vw,560px)] rounded-2xl border bg-card p-4 shadow-xl">
             <h2 className="mb-2 text-lg font-bold">إضافة منشور</h2>
-            <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="اكتب منشورك هنا" className="min-h-[120px] w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+            <div className="mb-2 grid gap-2">
+              <input value={imageUrl} onChange={(e)=>setImageUrl(e.target.value)} placeholder="رابط الصورة" className="w-full rounded-xl border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+              <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="اكتب منشورك هنا" className="min-h-[120px] w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40" />
+            </div>
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={()=>setShowComposer(false)} className="rounded-xl border px-4 py-2 text-sm">إلغاء</button>
               <button onClick={addPost} className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">نشر</button>
@@ -136,6 +158,7 @@ export default function SubscribersPage() {
         </div>
       )}
 
+      {/* Video modal */}
       {showVideo && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(92vw,560px)] rounded-2xl border bg-card p-4 shadow-xl">
