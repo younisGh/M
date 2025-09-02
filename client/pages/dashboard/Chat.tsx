@@ -29,7 +29,7 @@ export default function ChatPage() {
     () => [
       { id: "u1", name: "علي كريم", company: "شركة الرافدين" },
       { id: "u2", name: "سارة محمد", company: "نفط الجنوب" },
-      { id: "u3", name: "حسن عمران", company: "ب��اء العراق" },
+      { id: "u3", name: "حسن عمران", company: "بناء العراق" },
       { id: "u4", name: "نور مهدي", company: "مصرف الرافدين" },
     ],
     [],
@@ -218,9 +218,9 @@ export default function ChatPage() {
               <input ref={imageInputRef} type="file" multiple accept="image/*" className="hidden" onChange={onImageSelected} />
               <input ref={audioInputRef} type="file" multiple accept="audio/*" className="hidden" onChange={onAudioSelected} />
 
-              <button onClick={onPickImage} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">صورة</button>
-              <button onClick={onPickAudio} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">صوت</button>
-              <button onClick={onPickFiles} disabled={closed} className="rounded-xl border px-3 py-2 text-xs hover:bg-accent disabled:opacity-60">ملف</button>
+              <button onClick={onPickImage} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="صورة" aria-label="صورة"><ImageIcon className="h-4 w-4" /></button>
+              <button onClick={onPickAudio} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="صوت" aria-label="صوت"><Mic className="h-4 w-4" /></button>
+              <button onClick={onPickFiles} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="ملف" aria-label="ملف"><Paperclip className="h-4 w-4" /></button>
               <button
                 onClick={send}
                 disabled={closed}
