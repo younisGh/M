@@ -129,9 +129,9 @@ export default function SubscribersPage() {
       },
       {
         id: "v2",
-        title: "مخطط مدينة صناعية",
-        description: "عرض بصري لمخططات البنى التحتية للمشروع.",
-        thumbnailUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
+        title: "مخطط منطقة لوجستية",
+        description: "عرض بصري لمخططات البنى التحتية للمستودعات وساحة الحاويات.",
+        thumbnailUrl: "https://images.unsplash.com/photo-1517502474097-f9b30659dadb?q=80&w=1600&auto=format&fit=crop",
         views: 920,
         comments: 12,
         likes: 102,
@@ -181,17 +181,17 @@ export default function SubscribersPage() {
   return (
     <section className="relative">
       {/* Fixed left rail */}
-      <div className="pointer-events-none fixed left-0 top-1/3 z-50 flex flex-col items-start gap-2">
-        <Link to="/" className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-background/80 p-3 shadow hover:bg-accent" title="الرئيسية" aria-label="الرئيسية">
+      <div className="pointer-events-none fixed left-2 bottom-4 z-50 flex items-end gap-2">
+        <Link to="/" className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الرئيسية" aria-label="الرئيسية">
           <Home className="h-5 w-5" />
         </Link>
-        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="إضافة منشور" aria-label="إضافة منشور">
+        <button onClick={() => setShowComposer(true)} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة منشور" aria-label="إضافة منشور">
           <Plus className="h-5 w-5" />
         </button>
-        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="إضافة فيديو" aria-label="إضافة فيديو">
+        <button onClick={() => setShowVideo(true)} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500 text-black shadow-lg shadow-black/10 transition hover:brightness-110" title="إضافة فيديو" aria-label="إضافة فيديو">
           <Video className="h-5 w-5" />
         </button>
-        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex items-center justify-center rounded-r-xl border bg-emerald-600 p-3 text-white shadow hover:brightness-110" title="الدردشة" aria-label="الدردشة">
+        <button onClick={() => navigate("/chat")} className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-black/10 transition hover:brightness-110" title="الدردشة" aria-label="الدردشة">
           <MessageCircle className="h-5 w-5" />
         </button>
       </div>
