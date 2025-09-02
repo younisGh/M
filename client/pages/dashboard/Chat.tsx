@@ -54,6 +54,7 @@ export default function ChatPage() {
   const [closed, setClosed] = useState(false);
   const [fontSize, setFontSize] = useState(14);
   const [isTyping, setIsTyping] = useState(false);
+  const [showChatMobile, setShowChatMobile] = useState(false);
 
   const { role, subscription, chatReadOnly, setChatReadOnly } = useMock();
 
@@ -127,7 +128,7 @@ export default function ChatPage() {
         const reply: Message = {
           id: `${Date.now()}_r`,
           from: active?.name || "المساعد",
-          text: "حسناً، تم استلام رسالتك وسنرد ق��يباً.",
+          text: "حسناً، تم استلام رسالتك وسنرد قريباً.",
         };
         return { ...conv, [activeId]: [...list, reply] };
       });
@@ -148,7 +149,7 @@ export default function ChatPage() {
       </div>
       <div className="grid gap-4 md:grid-cols-[300px,1fr]">
         {/* Contacts */}
-        <aside className="rounded-2xl border p-3">
+        <aside className={`rounded-2xl border p-3 ${showChatMobile ? "hidden md:block" : ""}`}>
           <div className="mb-3">
             <input
               value={query}
@@ -161,7 +162,10 @@ export default function ChatPage() {
             {filtered.map((c) => (
               <button
                 key={c.id}
-                onClick={() => setActiveId(c.id)}
+                onClick={() => {
+                  setActiveId(c.id);
+                  setShowChatMobile(true);
+                }}
                 className={`w-full rounded-xl px-3 py-2 text-right text-sm ${
                   activeId === c.id ? "bg-accent" : "hover:bg-accent"
                 }`}
@@ -174,11 +178,16 @@ export default function ChatPage() {
         </aside>
 
         {/* Conversation */}
-        <div className="flex min-h-[460px] flex-col rounded-2xl border">
+        <div className={`${showChatMobile ? "flex" : "hidden md:flex"} min-h-[460px] flex-col rounded-2xl border`}>
           <div className="flex items-center justify-between border-b px-4 py-3">
-            <div className="text-sm">
+            <div className="flex items-center gap-2">
+              <button onClick={() => setShowChatMobile(false)} className="md:hidden rounded-full border p-2 hover:bg-accent" title="رجوع" aria-label="رجوع">
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <div className="text-sm">
               <div className="font-extrabold">{active?.name || "مستخدم"}</div>
               <div className="text-foreground/60">{active?.company}</div>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               {chatReadOnly && (
