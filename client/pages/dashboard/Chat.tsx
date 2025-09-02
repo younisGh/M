@@ -135,6 +135,10 @@ export default function ChatPage() {
               <div className="font-extrabold">{active?.name}</div>
               <div className="text-foreground/60">{active?.company}</div>
             </div>
+            <div className="flex items-center gap-2">
+              <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال صوتي" aria-label="اتصال صوتي">🔊</button>
+              <button className="rounded-full border p-2 text-sm hover:bg-accent" title="اتصال فيديوي" aria-label="اتصال فيديوي">🎥</button>
+            </div>
           </div>
 
           <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4">
