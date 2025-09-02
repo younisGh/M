@@ -1,6 +1,13 @@
 import { useMemo, useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Phone, Video as VideoIcon, Image as ImageIcon, Mic, Paperclip, ArrowRight } from "lucide-react";
+import {
+  Phone,
+  Video as VideoIcon,
+  Image as ImageIcon,
+  Mic,
+  Paperclip,
+  ArrowRight,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMock } from "@/mock/MockContext";
 import PaywallNotice from "@/components/mock/PaywallNotice";
@@ -20,7 +27,11 @@ interface Message {
   attachments?: Attachment[];
 }
 
-interface Contact { id: string; name: string; company: string }
+interface Contact {
+  id: string;
+  name: string;
+  company: string;
+}
 
 export default function ChatPage() {
   const listRef = useRef<HTMLDivElement>(null);
@@ -39,16 +50,20 @@ export default function ChatPage() {
   );
 
   const [query, setQuery] = useState("");
-  const filtered = contacts.filter((c) => c.name.includes(query) || c.company.includes(query));
+  const filtered = contacts.filter(
+    (c) => c.name.includes(query) || c.company.includes(query),
+  );
 
   const [activeId, setActiveId] = useState<string>(contacts[0]?.id || "");
   const active = contacts.find((c) => c.id === activeId);
 
-  const [conversations, setConversations] = useState<Record<string, Message[]>>({
-    u1: [
-      { id: "m1", from: "علي كريم", text: "أهلًا! كي�� يمكنني المساعدة؟" },
-    ],
-  });
+  const [conversations, setConversations] = useState<Record<string, Message[]>>(
+    {
+      u1: [
+        { id: "m1", from: "علي كريم", text: "أهلًا! كي�� يمكنني المساعدة؟" },
+      ],
+    },
+  );
 
   const [text, setText] = useState("");
   const [pending, setPending] = useState<Attachment[]>([]);
@@ -60,9 +75,15 @@ export default function ChatPage() {
 
   const { role, subscription, chatReadOnly, setChatReadOnly } = useMock();
 
-  function onPickFiles() { fileInputRef.current?.click(); }
-  function onPickImage() { imageInputRef.current?.click(); }
-  function onPickAudio() { audioInputRef.current?.click(); }
+  function onPickFiles() {
+    fileInputRef.current?.click();
+  }
+  function onPickImage() {
+    imageInputRef.current?.click();
+  }
+  function onPickAudio() {
+    audioInputRef.current?.click();
+  }
 
   function mapFiles(files: File[]) {
     return files.map((f) => ({
@@ -121,7 +142,10 @@ export default function ChatPage() {
     });
     setText("");
     setPending([]);
-    setTimeout(() => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }), 0);
+    setTimeout(
+      () => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }),
+      0,
+    );
 
     setIsTyping(true);
     setTimeout(() => {
@@ -135,7 +159,10 @@ export default function ChatPage() {
         return { ...conv, [activeId]: [...list, reply] };
       });
       setIsTyping(false);
-      setTimeout(() => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }), 0);
+      setTimeout(
+        () => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }),
+        0,
+      );
     }, 900);
   }
 
@@ -146,14 +173,21 @@ export default function ChatPage() {
       {!(isMobile && showChatMobile) && (
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-extrabold">التواصل</h1>
-          <Link to="/subscribers" className="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-sm hover:bg-accent" title="رجوع" aria-label="رجوع">
+          <Link
+            to="/subscribers"
+            className="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-sm hover:bg-accent"
+            title="رجوع"
+            aria-label="رجوع"
+          >
             <ArrowRight className="h-4 w-4" /> رجوع
           </Link>
         </div>
       )}
       <div className="relative grid gap-4 md:grid-cols-[300px,1fr]">
         {/* Contacts */}
-        <aside className={`rounded-2xl border p-3 ${showChatMobile ? "hidden md:block" : ""}`}>
+        <aside
+          className={`rounded-2xl border p-3 ${showChatMobile ? "hidden md:block" : ""}`}
+        >
           <div className="mb-3">
             <input
               value={query}
@@ -182,32 +216,78 @@ export default function ChatPage() {
         </aside>
 
         {/* Conversation */}
-        <div className={`${showChatMobile ? "flex" : "hidden md:flex"} min-h-[460px] flex-col md:rounded-2xl border transition-all duration-300 ${isMobile && showChatMobile ? "fixed inset-0 z-[60] rounded-none border-0 bg-background" : "bg-card"}`}>
+        <div
+          className={`${showChatMobile ? "flex" : "hidden md:flex"} min-h-[460px] flex-col md:rounded-2xl border transition-all duration-300 ${isMobile && showChatMobile ? "fixed inset-0 z-[60] rounded-none border-0 bg-background" : "bg-card"}`}
+        >
           <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background/80 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
             <div className="flex items-center gap-2">
-              <button onClick={() => setShowChatMobile(false)} className="md:hidden rounded-full border p-2 hover:bg-accent" title="رجوع" aria-label="رجوع">
+              <button
+                onClick={() => setShowChatMobile(false)}
+                className="md:hidden rounded-full border p-2 hover:bg-accent"
+                title="رجوع"
+                aria-label="رجوع"
+              >
                 <ArrowRight className="h-4 w-4" />
               </button>
               <div className="text-sm">
-              <div className="font-extrabold">{active?.name || "مستخدم"}</div>
-              <div className="text-foreground/60">{active?.company}</div>
+                <div className="font-extrabold">{active?.name || "مستخدم"}</div>
+                <div className="text-foreground/60">{active?.company}</div>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {chatReadOnly && (
-                <button onClick={()=>setChatReadOnly(false)} className="rounded-full border px-3 py-1 text-xs hover:bg-accent" title="فتح القناة" aria-label="فتح القناة">فتح القناة</button>
+                <button
+                  onClick={() => setChatReadOnly(false)}
+                  className="rounded-full border px-3 py-1 text-xs hover:bg-accent"
+                  title="فتح القناة"
+                  aria-label="فتح القناة"
+                >
+                  فتح القناة
+                </button>
               )}
-              <label className="flex items-center gap-1 text-xs text-foreground/70" title="ح��م الخط">
+              <label
+                className="flex items-center gap-1 text-xs text-foreground/70"
+                title="ح��م الخط"
+              >
                 Aa
-                <input type="range" min={12} max={18} value={fontSize} onChange={(e)=>setFontSize(Number(e.target.value))} />
+                <input
+                  type="range"
+                  min={12}
+                  max={18}
+                  value={fontSize}
+                  onChange={(e) => setFontSize(Number(e.target.value))}
+                />
               </label>
-              <button onClick={()=>setClosed((v)=>!v)} className={`rounded-full border p-2 text-xs ${closed? 'bg-amber-500/20':'hover:bg-accent'}`} title="إغلاق/فتح" aria-label="إغلاق/فتح">{closed? 'مغلقة' : 'مفتوحة'}</button>
-              <button className="rounded-full border p-2 hover:bg-accent" title="اتصال صوتي" aria-label="اتصال صوتي"><Phone className="h-4 w-4" /></button>
-              <button className="rounded-full border p-2 hover:bg-accent" title="اتصال فيديوي" aria-label="اتصال فيديوي"><VideoIcon className="h-4 w-4" /></button>
+              <button
+                onClick={() => setClosed((v) => !v)}
+                className={`rounded-full border p-2 text-xs ${closed ? "bg-amber-500/20" : "hover:bg-accent"}`}
+                title="إغلاق/فتح"
+                aria-label="إغلاق/فتح"
+              >
+                {closed ? "مغلقة" : "مفتوحة"}
+              </button>
+              <button
+                className="rounded-full border p-2 hover:bg-accent"
+                title="اتصال صوتي"
+                aria-label="اتصال صوتي"
+              >
+                <Phone className="h-4 w-4" />
+              </button>
+              <button
+                className="rounded-full border p-2 hover:bg-accent"
+                title="اتصال فيديوي"
+                aria-label="اتصال فيديوي"
+              >
+                <VideoIcon className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
-          <div ref={listRef} className="flex-1 space-y-2 overflow-y-auto p-4 bg-gradient-to-b from-background to-background/60" style={{ fontSize }}>
+          <div
+            ref={listRef}
+            className="flex-1 space-y-2 overflow-y-auto p-4 bg-gradient-to-b from-background to-background/60"
+            style={{ fontSize }}
+          >
             {msgs.map((m) => (
               <div
                 key={m.id}
@@ -218,29 +298,43 @@ export default function ChatPage() {
                 } hover:scale-[1.01]`}
               >
                 <div className="text-[11px] opacity-70">{m.from}</div>
-                {m.text && <div className="mt-1 whitespace-pre-wrap">{m.text}</div>}
+                {m.text && (
+                  <div className="mt-1 whitespace-pre-wrap">{m.text}</div>
+                )}
                 {m.attachments && m.attachments.length > 0 && (
-                  <div className={`mt-2 grid gap-2 ${m.attachments.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  <div
+                    className={`mt-2 grid gap-2 ${m.attachments.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
+                  >
                     {m.attachments.map((a) => (
-                      <AttachmentView key={a.id} a={a} />)
-                    )}
+                      <AttachmentView key={a.id} a={a} />
+                    ))}
                   </div>
                 )}
               </div>
             ))}
             {isTyping && (
-              <div className="text-xs text-foreground/60">{active?.name || 'المساعد'} يكتب...</div>
+              <div className="text-xs text-foreground/60">
+                {active?.name || "المساعد"} يكتب...
+              </div>
             )}
           </div>
 
           {/* Composer */}
           <div className="border-t p-3">
             <PaywallNotice feature="المراسلة" />
-            {closed && <div className="mb-2 rounded-xl border bg-amber-50 p-2 text-xs text-amber-700">المحادثة مغلقة. افتحها لإرسال رسائل.</div>}
+            {closed && (
+              <div className="mb-2 rounded-xl border bg-amber-50 p-2 text-xs text-amber-700">
+                المحادثة مغلقة. افتحها لإرسال رسائل.
+              </div>
+            )}
             {pending.length > 0 && (
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 {pending.map((a) => (
-                  <PendingAttachment key={a.id} a={a} onRemove={() => removePending(a.id)} />
+                  <PendingAttachment
+                    key={a.id}
+                    a={a}
+                    onRemove={() => removePending(a.id)}
+                  />
                 ))}
               </div>
             )}
@@ -253,13 +347,58 @@ export default function ChatPage() {
                 className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
                 disabled={closed}
               />
-              <input ref={fileInputRef} type="file" multiple accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.*" className="hidden" onChange={onFilesSelected} />
-              <input ref={imageInputRef} type="file" multiple accept="image/*" className="hidden" onChange={onImageSelected} />
-              <input ref={audioInputRef} type="file" multiple accept="audio/*" className="hidden" onChange={onAudioSelected} />
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.*"
+                className="hidden"
+                onChange={onFilesSelected}
+              />
+              <input
+                ref={imageInputRef}
+                type="file"
+                multiple
+                accept="image/*"
+                className="hidden"
+                onChange={onImageSelected}
+              />
+              <input
+                ref={audioInputRef}
+                type="file"
+                multiple
+                accept="audio/*"
+                className="hidden"
+                onChange={onAudioSelected}
+              />
 
-              <button onClick={onPickImage} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="صورة" aria-label="صورة"><ImageIcon className="h-4 w-4" /></button>
-              <button onClick={onPickAudio} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="صوت" aria-label="صوت"><Mic className="h-4 w-4" /></button>
-              <button onClick={onPickFiles} disabled={closed} className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60" title="ملف" aria-label="ملف"><Paperclip className="h-4 w-4" /></button>
+              <button
+                onClick={onPickImage}
+                disabled={closed}
+                className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60"
+                title="صورة"
+                aria-label="صورة"
+              >
+                <ImageIcon className="h-4 w-4" />
+              </button>
+              <button
+                onClick={onPickAudio}
+                disabled={closed}
+                className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60"
+                title="صوت"
+                aria-label="صوت"
+              >
+                <Mic className="h-4 w-4" />
+              </button>
+              <button
+                onClick={onPickFiles}
+                disabled={closed}
+                className="rounded-xl border p-2 hover:bg-accent disabled:opacity-60"
+                title="ملف"
+                aria-label="ملف"
+              >
+                <Paperclip className="h-4 w-4" />
+              </button>
               <button
                 onClick={send}
                 disabled={closed}
@@ -287,7 +426,12 @@ function humanSize(n: number) {
 
 function AttachmentView({ a }: { a: Attachment }) {
   return isImage(a.type) ? (
-    <a href={a.url} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-xl border">
+    <a
+      href={a.url}
+      target="_blank"
+      rel="noreferrer"
+      className="block overflow-hidden rounded-xl border"
+    >
       <img src={a.url} alt={a.name} className="h-40 w-full object-cover" />
     </a>
   ) : (
@@ -302,17 +446,34 @@ function AttachmentView({ a }: { a: Attachment }) {
   );
 }
 
-function PendingAttachment({ a, onRemove }: { a: Attachment; onRemove: () => void }) {
+function PendingAttachment({
+  a,
+  onRemove,
+}: {
+  a: Attachment;
+  onRemove: () => void;
+}) {
   return isImage(a.type) ? (
     <div className="relative">
-      <img src={a.url} alt={a.name} className="h-16 w-16 rounded-lg object-cover" />
-      <button onClick={onRemove} className="absolute right-[-8px] top-[-8px] rounded-full bg-destructive px-1.5 py-0.5 text-[10px] text-destructive-foreground">إزالة</button>
+      <img
+        src={a.url}
+        alt={a.name}
+        className="h-16 w-16 rounded-lg object-cover"
+      />
+      <button
+        onClick={onRemove}
+        className="absolute right-[-8px] top-[-8px] rounded-full bg-destructive px-1.5 py-0.5 text-[10px] text-destructive-foreground"
+      >
+        إزالة
+      </button>
     </div>
   ) : (
     <div className="flex items-center gap-2 rounded-xl border bg-background px-3 py-1.5 text-xs">
       <span className="truncate max-w-[140px]">{a.name}</span>
       <span className="text-foreground/60">{humanSize(a.size)}</span>
-      <button onClick={onRemove} className="text-destructive">إزالة</button>
+      <button onClick={onRemove} className="text-destructive">
+        إزالة
+      </button>
     </div>
   );
 }

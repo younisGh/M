@@ -3,9 +3,15 @@ import { sectionsData } from "@/components/home/SectionsInfograph";
 import { Trash2, ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-interface SectionPost { id: string; text: string; author: string }
+interface SectionPost {
+  id: string;
+  text: string;
+  author: string;
+}
 
-function storageKey(idx: number) { return `section_posts_${idx}`; }
+function storageKey(idx: number) {
+  return `section_posts_${idx}`;
+}
 
 export default function SectionPostsPage() {
   const params = useParams();
@@ -33,17 +39,27 @@ export default function SectionPostsPage() {
   }, [idx, section]);
 
   useEffect(() => {
-    try { localStorage.setItem(storageKey(idx), JSON.stringify(posts)); } catch {}
+    try {
+      localStorage.setItem(storageKey(idx), JSON.stringify(posts));
+    } catch {}
   }, [idx, posts]);
 
-  const header = useMemo(() => (
-    <div className="flex items-center justify-between">
-      <h1 className="text-2xl font-extrabold">{section ? `منشورات قسم: ${section.title}` : "قسم غير موجود"}</h1>
-      <Link to="/dashboard/stats" className="inline-flex items-center gap-1 text-sm text-foreground/70 hover:text-foreground">
-        <ArrowRight className="h-4 w-4" /> عودة إلى الإحصائيات
-      </Link>
-    </div>
-  ), [section]);
+  const header = useMemo(
+    () => (
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-extrabold">
+          {section ? `منشورات قسم: ${section.title}` : "قسم غير موجود"}
+        </h1>
+        <Link
+          to="/dashboard/stats"
+          className="inline-flex items-center gap-1 text-sm text-foreground/70 hover:text-foreground"
+        >
+          <ArrowRight className="h-4 w-4" /> عودة إلى الإحصائيات
+        </Link>
+      </div>
+    ),
+    [section],
+  );
 
   function remove(id: string) {
     if (!confirm("هل تريد حذف هذا المنشور؟")) return;
@@ -54,7 +70,9 @@ export default function SectionPostsPage() {
     return (
       <section className="grid gap-4">
         {header}
-        <div className="rounded-2xl border bg-card p-4">لا يوجد قسم بهذا المعرف.</div>
+        <div className="rounded-2xl border bg-card p-4">
+          لا يوجد قسم بهذا المعرف.
+        </div>
       </section>
     );
   }
@@ -82,7 +100,9 @@ export default function SectionPostsPage() {
           </div>
         ))}
         {posts.length === 0 && (
-          <div className="rounded-2xl border bg-card p-6 text-center text-sm text-foreground/60">لا توجد منشورات حالياً.</div>
+          <div className="rounded-2xl border bg-card p-6 text-center text-sm text-foreground/60">
+            لا توجد منشورات حالياً.
+          </div>
         )}
       </div>
     </section>

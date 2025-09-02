@@ -15,7 +15,10 @@ export default function DashboardLayout() {
     updateDir();
     const obs = new MutationObserver(updateDir);
     if (document?.documentElement) {
-      obs.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
+      obs.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["dir"],
+      });
     }
     return () => obs.disconnect();
   }, []);
@@ -47,7 +50,9 @@ export default function DashboardLayout() {
       <div className={`mt-4 flex ${flexDir} gap-4`}>
         {/* Sidebar: fixed when open */}
         {open && (
-          <div className={`fixed ${fixedSide} top-16 z-50 h-[calc(100vh-4rem)] w-64`}>
+          <div
+            className={`fixed ${fixedSide} top-16 z-50 h-[calc(100vh-4rem)] w-64`}
+          >
             <Sidebar />
           </div>
         )}
