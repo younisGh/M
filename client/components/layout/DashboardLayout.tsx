@@ -5,11 +5,24 @@ import Sidebar from "./Sidebar";
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const [isRtl, setIsRtl] = useState<boolean>(true);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     if (mq.matches) setOpen(false);
+
+    const updateDir = () => setIsRtl(document?.documentElement?.dir === "rtl");
+    updateDir();
+    const obs = new MutationObserver(updateDir);
+    if (document?.documentElement) {
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
+    }
+    return () => obs.disconnect();
   }, []);
+
+  const togglePos = isRtl ? "right-4" : "left-4";
+  const fixedSide = isRtl ? "right-0" : "left-0";
+  const flexDir = isRtl ? "flex-row-reverse" : "flex-row";
 
   return (
     <section className="container py-0">
@@ -17,7 +30,7 @@ export default function DashboardLayout() {
       <button
         aria-label={open ? "إغلاق القائمة الجانبية" : "فتح القائمة الجانبية"}
         onClick={() => setOpen((v) => !v)}
-        className={`fixed rtl:right-4 ltr:left-4 top-20 z-50 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background/80 backdrop-blur shadow hover:bg-accent`}
+        className={`fixed ${togglePos} top-20 z-50 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background/80 backdrop-blur shadow hover:bg-accent`}
       >
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
@@ -31,26 +44,18 @@ export default function DashboardLayout() {
         />
       )}
 
-      <div className={`mt-4 flex rtl:flex-row-reverse ltr:flex-row gap-4`}>
-        {/* Sidebar: fixed on mobile, inline on desktop */}
-        <div
-          className={
-            open
-              ? `fixed rtl:right-0 ltr:left-0 top-16 z-50 h-[calc(100vh-4rem)] w-64 md:static md:z-auto`
-              : "hidden"
-          }
-        >
-          {/* Mobile */}
-          {open && (
+      <div className={`mt-4 flex ${flexDir} gap-4`}>
+        {/* Sidebar: fixed when open */}
+        {open && (
+          <div className={`fixed ${fixedSide} top-16 z-50 h-[calc(100vh-4rem)] w-64 md:static md:z-auto`}>
             <div className="md:hidden">
               <Sidebar />
             </div>
-          )}
-          {/* Desktop */}
-          <div className="hidden md:block">
-            {open && <Sidebar />}
+            <div className="hidden md:block">
+              <Sidebar />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="min-h-[calc(100vh-6rem)] flex-1 rounded-2xl border bg-card p-4 shadow-sm">
           <Outlet />
