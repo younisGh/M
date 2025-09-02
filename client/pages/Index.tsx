@@ -7,7 +7,8 @@ import PostCard, { Post } from "@/components/home/PostCard";
 import { SectionsGrid } from "@/components/home/SectionsInfograph";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-function Stat({ value, label, icon: Icon }: { value: string; label: string; icon?: (props: { className?: string }) => JSX.Element }) {
+import type { ComponentType } from "react";
+function Stat({ value, label, icon: Icon }: { value: string; label: string; icon?: ComponentType<{ className?: string }> }) {
   return (
     <div className="rounded-2xl border bg-card/60 p-4 text-center">
       <div className="text-2xl font-extrabold text-violet-700">{value}</div>
@@ -39,7 +40,7 @@ export default function Index() {
 
   const [sectionsOpen, setSectionsOpen] = useState(false);
 
-  const icons: { Icon: (props: { className?: string }) => JSX.Element; label: string }[] = [
+  const icons: { Icon: ComponentType<{ className?: string }>; label: string }[] = [
     { Icon: Newspaper, label: "منشورات" },
     { Icon: MessageSquare, label: "رسائل" },
     { Icon: ImageIcon, label: "صور" },
@@ -89,7 +90,7 @@ export default function Index() {
       id: 5,
       imageUrl:
         "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop",
-      description: "إطلاق تحديثات جديدة لمنصة الأعمال وخارطة الطريق القادمة.",
+      description: "إطلاق تحديثات جديدة لمنصة الأعمال وخارطة ال��ريق القادمة.",
       comments: 41,
       views: 1760,
       rating: 4.9,
