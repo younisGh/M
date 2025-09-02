@@ -27,6 +27,8 @@ import NotificationsPage from "./pages/dashboard/Notifications";
 import CallsPage from "./pages/dashboard/Calls";
 import SettingsPage from "./pages/dashboard/Settings";
 import PaymentsPage from "./pages/dashboard/Payments";
+import PrivacyPage from "./pages/dashboard/Privacy";
+import SectionPostsPage from "./pages/dashboard/SectionPosts";
 
 const queryClient = new QueryClient();
 
@@ -68,7 +70,7 @@ function Footer() {
   return (
     <footer className="border-t bg-white/50 dark:bg-background/70">
       <div className="container py-8 text-center text-sm text-foreground/60">
-        © {new Date().getFullYear()} Mohtaref · جميع الحقوق محفوظة
+        © {new Date().getFullYear()} Mohtaref �� جميع الحقوق محفوظة
       </div>
     </footer>
   );
@@ -114,6 +116,8 @@ const App = () => (
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="calls" element={<CallsPage />} />
               <Route path="payments" element={<PaymentsPage />} />
+              <Route path="privacy" element={<PrivacyPage />} />
+              <Route path="section/:idx" element={<SectionPostsPage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
 
