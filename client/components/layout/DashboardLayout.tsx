@@ -2,21 +2,27 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Sidebar from "./Sidebar";
-import { useMock } from "@/mock/MockContext";
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(true);
-  const { lang } = useMock();
-  const isArabic = lang === "ar";
+  const [isRtl, setIsRtl] = useState<boolean>(true);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     if (mq.matches) setOpen(false);
+
+    const updateDir = () => setIsRtl(document?.documentElement?.dir === "rtl");
+    updateDir();
+    const obs = new MutationObserver(updateDir);
+    if (document?.documentElement) {
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
+    }
+    return () => obs.disconnect();
   }, []);
 
-  const flexDir = isArabic ? "flex-row-reverse" : "flex-row";
-  const fixedSide = isArabic ? "right-0" : "left-0";
-  const togglePos = isArabic ? "right-4" : "left-4";
+  const flexDir = isRtl ? "flex-row-reverse" : "flex-row";
+  const fixedSide = isRtl ? "right-0" : "left-0";
+  const togglePos = isRtl ? "right-4" : "left-4";
 
   return (
     <section className="container py-0">
