@@ -54,7 +54,7 @@ export default function ChatPage() {
   const [fontSize, setFontSize] = useState(14);
   const [isTyping, setIsTyping] = useState(false);
 
-  const { role, subscription, chatReadOnly } = useMock();
+  const { role, subscription, chatReadOnly, setChatReadOnly } = useMock();
 
   function onPickFiles() { fileInputRef.current?.click(); }
   function onPickImage() { imageInputRef.current?.click(); }
