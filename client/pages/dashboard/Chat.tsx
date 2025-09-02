@@ -22,6 +22,8 @@ interface Contact { id: string; name: string; company: string }
 export default function ChatPage() {
   const listRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
 
   const contacts = useMemo<Contact[]>(
     () => [
@@ -47,22 +49,42 @@ export default function ChatPage() {
 
   const [text, setText] = useState("");
   const [pending, setPending] = useState<Attachment[]>([]);
+  const [closed, setClosed] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
 
   const { role, subscription, chatReadOnly } = useMock();
 
-  function onPickFiles() {
-    fileInputRef.current?.click();
-  }
+  function onPickFiles() { fileInputRef.current?.click(); }
+  function onPickImage() { imageInputRef.current?.click(); }
+  function onPickAudio() { audioInputRef.current?.click(); }
 
-  function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || []);
-    const mapped: Attachment[] = files.map((f) => ({
+  function mapFiles(files: File[]) {
+    return files.map((f) => ({
       id: `${f.name}-${f.size}-${Date.now()}`,
       name: f.name,
       url: URL.createObjectURL(f),
       type: f.type,
       size: f.size,
     }));
+  }
+
+  function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const mapped: Attachment[] = mapFiles(files);
+    setPending((p) => [...p, ...mapped]);
+    e.currentTarget.value = "";
+  }
+
+  function onImageSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const mapped: Attachment[] = mapFiles(files);
+    setPending((p) => [...p, ...mapped]);
+    e.currentTarget.value = "";
+  }
+
+  function onAudioSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const mapped: Attachment[] = mapFiles(files);
     setPending((p) => [...p, ...mapped]);
     e.currentTarget.value = "";
   }
