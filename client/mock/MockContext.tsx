@@ -26,11 +26,11 @@ const MockCtx = createContext<MockState | null>(null);
 const LS_KEY = "mohtaref_mock";
 
 export function MockProvider({ children }: { children: ReactNode }) {
-  const [role, setRole] = useState<Role>("visitor");
-  const [subscription, setSubscription] = useState<Subscription>("inactive");
+  const [role, setRole] = useState<Role>("admin");
+  const [subscription, setSubscription] = useState<Subscription>("active");
   const [lang, setLang] = useState<Lang>("ar");
-  const [chatReadOnly, setChatReadOnly] = useState<boolean>(true);
-  const [onboarded, setOnboarded] = useState<boolean>(false);
+  const [chatReadOnly, setChatReadOnly] = useState<boolean>(false);
+  const [onboarded, setOnboarded] = useState<boolean>(true);
   const [provinceId, setProvinceId] = useState<string | null>(null);
   const [sectionId, setSectionId] = useState<string | null>(null);
 
@@ -46,6 +46,8 @@ export function MockProvider({ children }: { children: ReactNode }) {
         if (typeof parsed.onboarded === "boolean") setOnboarded(parsed.onboarded);
         if (parsed.provinceId) setProvinceId(parsed.provinceId);
         if (parsed.sectionId) setSectionId(parsed.sectionId);
+      } else {
+        try { localStorage.setItem(LS_KEY, JSON.stringify({ role: "admin", subscription: "active", lang: "ar", chatReadOnly: false, onboarded: true })); } catch {}
       }
     } catch {}
   }, []);
