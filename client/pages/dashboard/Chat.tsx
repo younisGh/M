@@ -55,8 +55,6 @@ export default function ChatPage() {
   const [closed, setClosed] = useState(false);
   const [fontSize, setFontSize] = useState(14);
   const [isTyping, setIsTyping] = useState(false);
-  const [closed, setClosed] = useState(false);
-  const [fontSize, setFontSize] = useState(14);
 
   const { role, subscription, chatReadOnly } = useMock();
 
@@ -122,6 +120,21 @@ export default function ChatPage() {
     setText("");
     setPending([]);
     setTimeout(() => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }), 0);
+
+    setIsTyping(true);
+    setTimeout(() => {
+      setConversations((conv) => {
+        const list = conv[activeId] || [];
+        const reply: Message = {
+          id: `${Date.now()}_r`,
+          from: active?.name || "المساعد",
+          text: "حسناً، تم استلام رسالتك وسنرد قريباً.",
+        };
+        return { ...conv, [activeId]: [...list, reply] };
+      });
+      setIsTyping(false);
+      setTimeout(() => listRef.current?.scrollTo({ top: 1e9, behavior: "smooth" }), 0);
+    }, 900);
   }
 
   const msgs = conversations[activeId] || [];
